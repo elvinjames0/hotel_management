@@ -17,10 +17,10 @@ const getAllRoom = async (req, res) => {
       },
     });
     console.log("roomList: ", roomList);
-    successCode(res, roomList, successText);
+    return successCode(res, roomList, successText);
   } catch (err) {
     console.log("err");
-    errorCode(err, errorText);
+    return errorCode(err, errorText);
   }
 };
 const addRoom = async (req, res) => {
