@@ -8,24 +8,20 @@ const {
 } = require("../utils/response");
 const prisma = new PrismaClient();
 const getAllRoom = async (req, res) => {
-  console.log("res: ", res);
   console.log("working");
   try {
     console.log("room ");
+    successCode(res, { data: "abc" }, "done");
     const roomList = await prisma.ROOM_TYPE.findMany({
       include: {
         ROOM: true,
       },
     });
     console.log("roomList: ", roomList);
-    return res.status(200).json({
-      message: "oke",
-      roomList,
-      success: false,
-    });
+    successCode(res, roomList, successText);
   } catch (err) {
     console.log("err");
-    return errorCode(err, errorText);
+    errorCode(err, errorText);
   }
 };
 const addRoom = async (req, res) => {
