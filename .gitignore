@@ -6,7 +6,7 @@ server/node_modules
 client/.pnp
 client/.pnp.js
 client/.yarn/install-state.gz
-server/prisma
+
 
 # testing
 client/coverage
