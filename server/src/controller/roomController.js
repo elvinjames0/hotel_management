@@ -18,7 +18,11 @@ const getAllRoom = async (req, res) => {
       },
     });
     console.log("roomList: ", roomList);
-    return successCode(res, roomList, successText);
+    return res.status(200).json({
+      message: "oke",
+      roomList,
+      success: false,
+    });
   } catch (err) {
     console.log("err");
     return errorCode(err, errorText);
