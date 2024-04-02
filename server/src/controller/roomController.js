@@ -8,6 +8,7 @@ const {
 } = require("../utils/response");
 const prisma = new PrismaClient();
 const getAllRoom = async (req, res) => {
+  console.log("res: ", res);
   console.log("working");
   try {
     console.log("room ");
