@@ -2,15 +2,25 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { localStorageService, useLocal } from "@/controller/localStorage";
 import { useRouter } from "next/router";
+import { employeeService } from "@/services/employeeService";
 
 const SignIn = () => {
   const router = useRouter();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [isLogin, setIsLogin] = useState(false);
   const handleSignIn = (event) => {
     event.preventDefault();
-    localStorageService.setUserInfo({ username, password });
-    router.push("/");
+    employeeService
+      .loginEmployee({ username, password })
+      .then((res) => {
+        localStorageService.setUserInfo(res.data.data.token);
+        router.push("/");
+        setIsLogin(false);
+      })
+      .catch((err) => {
+        setIsLogin(true);
+      });
   };
   return (
     <div className="relative">
@@ -24,7 +34,7 @@ const SignIn = () => {
           />
         </div>
         <div className="h-full w-full flex items-center justify-center">
-          <div className=" w-96 h-72 signin-glass">
+          <div className=" w-96 signin-glass">
             <h1 className="text-center text-white text-2xl ">Sign in</h1>
             <form
               onSubmit={(e) => {
@@ -49,7 +59,7 @@ const SignIn = () => {
                   required
                 />
               </div>
-              <div class="mb-6">
+              <div>
                 <label
                   for="password"
                   class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -67,9 +77,16 @@ const SignIn = () => {
                   required
                 />
               </div>
+              <p
+                className={
+                  isLogin ? " text-sm text-center  font-bold my-3" : "hidden"
+                }
+              >
+                Wrong username or password !!!
+              </p>
               <button
                 type="submit"
-                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+                class="text-white mt-3 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
               >
                 Enter
               </button>

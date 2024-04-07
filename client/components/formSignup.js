@@ -1,11 +1,25 @@
 import React from "react";
-import { Button, Checkbox, Form, Input, Select, DatePicker } from "antd";
+import { Form, Input, Select, message } from "antd";
 import ButtonCustom from "./button";
-const onFinish = (values) => {
-  console.log("Success:", values);
+import { employeeService } from "@/services/employeeService";
+const onFinish = async (values) => {
+  try {
+    await employeeService.addEmployee({
+      ...values,
+      role_id: values.role_id * 1,
+      nationality: values.nationality * 1,
+      base_salary: values.base_salary * 1,
+      cccd: values.cccd * 1,
+      gender: values.gender == "true" ? true : false,
+      phone: values.phone * 1,
+    });
+    message.success("Update successfully!");
+  } catch (error) {
+    message.error("Fail");
+  }
 };
 const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
+  message.error(errorInfo);
 };
 const SignInForm = () => (
   <Form
@@ -25,7 +39,8 @@ const SignInForm = () => (
         rules={[
           {
             required: true,
-            message: "Please input your name!",
+            message: "Please input your name! min 6 characters",
+            pattern: RegExp(/^.{6,}$/),
           },
         ]}
       >
@@ -38,6 +53,7 @@ const SignInForm = () => (
           {
             required: true,
             message: "Please input your ID/Passport!",
+            pattern: RegExp(/^.{12}$/),
           },
         ]}
       >
@@ -49,7 +65,8 @@ const SignInForm = () => (
         rules={[
           {
             required: true,
-            message: "Please input your username!",
+            message: "Please input your username! min 6 characters",
+            pattern: RegExp(/^.{6,}$/),
           },
         ]}
       >
@@ -62,6 +79,7 @@ const SignInForm = () => (
           {
             required: true,
             message: "Please input your password!",
+            pattern: RegExp(/^(?=.*\d).{6,}$/),
           },
         ]}
       >
@@ -69,42 +87,39 @@ const SignInForm = () => (
       </Form.Item>
       <Form.Item
         label="Phone Number"
-        name="phoneNumber"
+        name="phone"
         rules={[
           {
             required: true,
-            message: "Please input your username!",
+            message: "Please input your phone number!",
+            pattern: RegExp(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/),
           },
         ]}
       >
         <Input placeholder="0777467444" />
       </Form.Item>
-      <Form.Item initialValue="vn" label="Nationality" name="nationality">
+      <Form.Item initialValue="1" label="Nationality" name="nationality">
         <Select>
-          <Select.Option value="vn">Vietnamese</Select.Option>
-          <Select.Option value="cn">Chinese</Select.Option>
-          <Select.Option value="us">American</Select.Option>
+          <Select.Option value="1">Vietnamese</Select.Option>
+          <Select.Option value="2">Chinese</Select.Option>
+          <Select.Option value="3">Other</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item initialValue="male" label="Gender" name="gender">
+      <Form.Item initialValue="true" label="Gender" name="gender">
         <Select>
-          <Select.Option value="male">Male</Select.Option>
-          <Select.Option value="female">Female</Select.Option>
-          <Select.Option value="other">Other</Select.Option>
+          <Select.Option value="true">Male</Select.Option>
+          <Select.Option value="false">Female</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item
-        initialValue="receptionist"
-        label="Department"
-        name="department"
-      >
+      <Form.Item initialValue="1" label="Role" name="role_id">
         <Select>
-          <Select.Option defaultValue value="manager">
+          <Select.Option defaultValue value="1">
             Manager
           </Select.Option>
-          <Select.Option value="receptionist">Receptionist</Select.Option>
-          <Select.Option value="security">Security</Select.Option>
-          <Select.Option value="labor">Labor</Select.Option>
+          <Select.Option value="2">Receptionist</Select.Option>
+          <Select.Option value="3">Security</Select.Option>
+          <Select.Option value="4">Labor</Select.Option>
+          <Select.Option value="5">Housekeeping</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item
@@ -120,13 +135,13 @@ const SignInForm = () => (
         <Input placeholder="123 Đường ABC, TP-HCM" />
       </Form.Item>
       <Form.Item
-        label="Email"
-        name="email"
+        label="Gmail"
+        name="gmail"
         rules={[
           {
             required: true,
-            message: "Please input your email!",
-            type: "email",
+            message: "Please input your gmail!",
+            type: "gmail",
           },
         ]}
       >
@@ -134,7 +149,7 @@ const SignInForm = () => (
       </Form.Item>
       <Form.Item
         label="Birthday"
-        name="birthday"
+        name="date_of_birth"
         rules={[
           {
             required: true,
@@ -147,6 +162,20 @@ const SignInForm = () => (
       >
         <Input placeholder="MM/DD/YYYY" />
       </Form.Item>
+      <Form.Item
+        label="Salary"
+        name="base_salary"
+        rules={[
+          {
+            required: true,
+            message: "Please input your salary!",
+          },
+        ]}
+      >
+        <Input placeholder="10000000" />
+      </Form.Item>
+    </div>
+    <div className=" flex justify-end">
       <ButtonCustom color="blue" content="Create" />
     </div>
   </Form>

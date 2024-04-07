@@ -57,14 +57,14 @@ const addEmployee = async (req, res) => {
       date_end,
       base_salary,
     } = req.body;
-    const hashPass = await hashPassword(password);
-    const hashcccd = await hashPassword(cccd);
+    // const hashPass = await hashPassword(password);
+    // const hashcccd = await hashPassword(cccd);
     const data = {
       role_id,
       username,
-      password: hashPass,
+      password,
       fullname,
-      cccd: hashcccd,
+      cccd,
       phone,
       address,
       gender,
@@ -76,15 +76,15 @@ const addEmployee = async (req, res) => {
       date_end,
       base_salary,
     };
-    let employee = await prisma.EMPLOYEE.findUnique({ where: { username } });
+    console.log("data: ", data);
+    let employee = await prisma.eMPLOYEE.findUnique({ where: { username } });
+    console.log("employee: ", employee);
     if (employee) {
       failCode(res, null, "Username has been used!");
       return;
     }
-    employee = await prisma.EMPLOYEE.create({ data });
-    if (employee) {
-      successCode(res, employee, "Created!");
-    }
+    let newEmployee = await prisma.eMPLOYEE.create({ data });
+    successCode(res, newEmployee, "Created!");
   } catch (err) {
     errorCode(err, errorText);
   }

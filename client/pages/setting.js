@@ -1,11 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import LogOut from "@/components/logOut";
 import Modal from "@/components/modal";
 import BookingForm from "@/components/homepage/popup/booking";
 import ButtonCustom from "@/components/button";
 import InputRadio from "@/components/homepage/inputRadio";
+import { roomService } from "@/services/roomService";
 
 const SettingPage = () => {
+  useEffect(() => {
+    roomService
+      .getAllRoom()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
   const [isModal, setIsModal] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   return (

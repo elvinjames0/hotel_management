@@ -9,12 +9,7 @@ employeeRouter.post(
   validator.checkValidate,
   Employee.loginEmployee
 );
-employeeRouter.post(
-  "/addEmployee",
-  validator.Auth.checkSignUp,
-  validator.checkValidate,
-  Employee.addEmployee
-);
+employeeRouter.post("/addEmployee", Employee.addEmployee);
 employeeRouter.get("/getDetailEmployee/:id", Employee.getDetailEmployee);
 employeeRouter.get("/getEmployeeList", Employee.getEmployeeList);
 employeeRouter.delete("/deleteEmployee/:id", Employee.deleteEmployee);
